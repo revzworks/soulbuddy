@@ -84,7 +84,7 @@ struct ProfileView: View {
                     Section {
                         Button("Sign Out") {
                             Task {
-                                try? await supabaseService.signOut()
+                                try? await AuthService.shared.signOut()
                             }
                         }
                         .foregroundColor(.red)

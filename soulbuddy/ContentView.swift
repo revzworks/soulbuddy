@@ -10,13 +10,14 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject private var supabaseService: SupabaseService
     @EnvironmentObject private var supabaseClientManager: SupabaseClientManager
+    @StateObject private var authService = AuthService.shared
     @Environment(\.colorScheme) var colorScheme
     @State private var showDebugMenu = false
     
     var body: some View {
         NavigationStack {
             Group {
-                if supabaseService.isAuthenticated {
+                if authService.isAuthenticated {
                     MainTabView()
                         .transition(.asymmetric(
                             insertion: .move(edge: .trailing),
@@ -30,7 +31,7 @@ struct ContentView: View {
                         ))
                 }
             }
-            .animation(Theme.Animation.pageTransition, value: supabaseService.isAuthenticated)
+            .animation(Theme.Animation.pageTransition, value: authService.isAuthenticated)
             .toolbar {
                 if SupabaseConfig.shared.isDevelopment {
                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -50,7 +51,7 @@ struct ContentView: View {
         .preferredColorScheme(nil) // Allow system to control
         .onAppear {
             print("🎨 Current color scheme: \(colorScheme)")
-            print("🔐 Authentication state: \(supabaseService.isAuthenticated)")
+            print("🔐 Authentication state: \(authService.isAuthenticated)")
             print("🔗 Supabase connection: \(supabaseClientManager.isConnected ? "✅" : "❌")")
         }
     }
