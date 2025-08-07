@@ -5,12 +5,14 @@ import Supabase
 struct SoulBuddyApp: App {
     @StateObject private var supabaseService = SupabaseService.shared
     @StateObject private var supabaseClientManager = SupabaseClientManager.shared
+    @StateObject private var profileStore = ProfileStore.shared
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(supabaseService)
                 .environmentObject(supabaseClientManager)
+                .environmentObject(profileStore)
                 .preferredColorScheme(nil) // Allow system to control light/dark mode
                 .onAppear {
                     setupApp()

@@ -10,19 +10,31 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject private var supabaseService: SupabaseService
     @EnvironmentObject private var supabaseClientManager: SupabaseClientManager
+    @EnvironmentObject private var profileStore: ProfileStore
     @StateObject private var authService = AuthService.shared
     @Environment(\.colorScheme) var colorScheme
     @State private var showDebugMenu = false
+    @State private var showProfileSetup = false
     
     var body: some View {
         NavigationStack {
             Group {
                 if authService.isAuthenticated {
-                    MainTabView()
+                    if profileStore.isProfileComplete {
+                        MainTabView()
+                            .transition(.asymmetric(
+                                insertion: .move(edge: .trailing),
+                                removal: .move(edge: .leading)
+                            ))
+                    } else {
+                        ProfileSetupView(isOnboarding: true) { _ in
+                            showProfileSetup = false
+                        }
                         .transition(.asymmetric(
-                            insertion: .move(edge: .trailing),
-                            removal: .move(edge: .leading)
+                            insertion: .move(edge: .bottom),
+                            removal: .move(edge: .bottom)
                         ))
+                    }
                 } else {
                     AuthenticationView()
                         .transition(.asymmetric(
@@ -32,6 +44,7 @@ struct ContentView: View {
                 }
             }
             .animation(Theme.Animation.pageTransition, value: authService.isAuthenticated)
+            .animation(Theme.Animation.pageTransition, value: profileStore.isProfileComplete)
             .toolbar {
                 if SupabaseConfig.shared.isDevelopment {
                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -53,6 +66,13 @@ struct ContentView: View {
             print("🎨 Current color scheme: \(colorScheme)")
             print("🔐 Authentication state: \(authService.isAuthenticated)")
             print("🔗 Supabase connection: \(supabaseClientManager.isConnected ? "✅" : "❌")")
+            print("👤 Profile complete: \(profileStore.isProfileComplete)")
+        }
+        .task {
+            // Load profile when authenticated
+            if authService.isAuthenticated {
+                await profileStore.loadProfile()
+            }
         }
     }
 }
