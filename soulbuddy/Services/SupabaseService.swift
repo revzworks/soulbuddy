@@ -15,20 +15,24 @@ class SupabaseService: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     private init() {
-        // Get configuration from Info.plist (populated by .xcconfig files)
-        guard let urlString = Bundle.main.infoDictionary?["SUPABASE_URL"] as? String,
-              let url = URL(string: urlString),
-              let key = Bundle.main.infoDictionary?["SUPABASE_ANON_KEY"] as? String else {
-            fatalError("❌ Supabase configuration missing. Please check your .xcconfig files and ensure SUPABASE_URL and SUPABASE_ANON_KEY are set.")
+        // Use the shared client manager instead of creating our own client
+        do {
+            self.supabase = try SupabaseClientManager.shared.getClient()
+        } catch {
+            // Fallback: create client directly if manager isn't ready
+            guard let urlString = Bundle.main.infoDictionary?["SUPABASE_URL"] as? String,
+                  let url = URL(string: urlString),
+                  let key = Bundle.main.infoDictionary?["SUPABASE_ANON_KEY"] as? String else {
+                fatalError("❌ Supabase configuration missing. Please check your .xcconfig files and ensure SUPABASE_URL and SUPABASE_ANON_KEY are set.")
+            }
+            
+            self.supabase = SupabaseClient(
+                supabaseURL: url,
+                supabaseKey: key
+            )
         }
         
-        self.supabase = SupabaseClient(
-            supabaseURL: url,
-            supabaseKey: key
-        )
-        
-        print("✅ Supabase initialized for environment: \(AppConfig.environment)")
-        print("🔗 Connected to: \(urlString)")
+        print("✅ SupabaseService initialized")
         
         setupAuthStateListener()
     }

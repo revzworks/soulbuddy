@@ -4,14 +4,19 @@ import Supabase
 @main
 struct SoulBuddyApp: App {
     @StateObject private var supabaseService = SupabaseService.shared
+    @StateObject private var supabaseClientManager = SupabaseClientManager.shared
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(supabaseService)
+                .environmentObject(supabaseClientManager)
                 .preferredColorScheme(nil) // Allow system to control light/dark mode
                 .onAppear {
                     setupApp()
+                }
+                .task {
+                    await initializeSupabase()
                 }
         }
     }
@@ -23,6 +28,33 @@ struct SoulBuddyApp: App {
         
         // Log Supabase connection (without sensitive data)
         print("🔗 Supabase URL configured: \(AppConfig.supabaseURL.isEmpty ? "❌ Missing" : "✅ Set")")
+    }
+    
+    @MainActor
+    private func initializeSupabase() async {
+        // Supabase client manager initializes automatically
+        // But we can perform additional setup here if needed
+        
+        // Wait for initialization
+        while !supabaseClientManager.isInitialized {
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+        }
+        
+        if supabaseClientManager.isConnected {
+            print("✅ Supabase fully initialized and connected")
+        } else if let error = supabaseClientManager.connectionError {
+            print("⚠️ Supabase initialized but connection issue: \(error)")
+        }
+        
+        // Perform health check in development
+        if SupabaseConfig.shared.isDevelopment {
+            let healthResult = await supabaseClientManager.performHealthCheck()
+            print("🏥 Health Check: \(healthResult.isHealthy ? "✅ Healthy" : "❌ Issues detected")")
+            
+            for (service, check) in healthResult.checks {
+                print("   \(service): \(check.message)")
+            }
+        }
     }
 }
 

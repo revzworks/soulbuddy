@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject private var supabaseService: SupabaseService
+    @EnvironmentObject private var supabaseClientManager: SupabaseClientManager
     @Environment(\.colorScheme) var colorScheme
+    @State private var showDebugMenu = false
     
     var body: some View {
         NavigationStack {
@@ -29,12 +31,27 @@ struct ContentView: View {
                 }
             }
             .animation(Theme.Animation.pageTransition, value: supabaseService.isAuthenticated)
+            .toolbar {
+                if SupabaseConfig.shared.isDevelopment {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Debug") {
+                            showDebugMenu = true
+                        }
+                        .font(Theme.Typography.caption)
+                    }
+                }
+            }
+            .sheet(isPresented: $showDebugMenu) {
+                SupabaseTestView()
+                    .environmentObject(supabaseClientManager)
+            }
         }
         .background(Theme.Colors.background)
         .preferredColorScheme(nil) // Allow system to control
         .onAppear {
             print("🎨 Current color scheme: \(colorScheme)")
             print("🔐 Authentication state: \(supabaseService.isAuthenticated)")
+            print("🔗 Supabase connection: \(supabaseClientManager.isConnected ? "✅" : "❌")")
         }
     }
 }
