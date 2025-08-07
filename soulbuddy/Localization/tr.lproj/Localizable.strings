@@ -1,0 +1,132 @@
+/* Authentication */
+"auth.welcome_back" = "Tekrar hoş geldiniz";
+"auth.create_account" = "Hesabınızı oluşturun";
+"auth.email_placeholder" = "E-posta";
+"auth.password_placeholder" = "Şifre";
+"auth.sign_in" = "Giriş Yap";
+"auth.create_account_button" = "Hesap Oluştur";
+"auth.already_have_account" = "Zaten hesabınız var mı? Giriş Yapın";
+"auth.no_account" = "Hesabınız yok mu? Kayıt Olun";
+"auth.continue_with_apple" = "Apple ile Devam Et";
+"auth.continue_with_google" = "Google ile Devam Et";
+
+/* Navigation */
+"nav.home" = "Ana Sayfa";
+"nav.mood_sessions" = "Ruh Hali Seansları";
+"nav.profile" = "Profil";
+
+/* Affirmations */
+"affirmations.title" = "Günlük Onaylamalar";
+"affirmations.loading" = "Onaylamalar yükleniyor...";
+"affirmations.error" = "Bir şeyler ters gitti";
+"affirmations.try_again" = "Tekrar Dene";
+"affirmations.no_content" = "Hiç onaylama mevcut değil";
+"affirmations.no_content_description" = "Daha fazla pozitif içerik için daha sonra tekrar kontrol edin!";
+"affirmations.next" = "Sonraki Onaylama";
+"affirmations.previous" = "Önceki";
+"affirmations.current_position" = "%d / %d";
+
+/* Intensities */
+"intensity.gentle" = "Nazik";
+"intensity.moderate" = "Orta";
+"intensity.strong" = "Güçlü";
+
+/* Categories */
+"category.confidence" = "Özgüven";
+"category.motivation" = "Motivasyon";
+"category.self_love" = "Özsevgi";
+"category.stress_relief" = "Stres Azaltma";
+"category.focus" = "Odaklanma";
+"category.gratitude" = "Minnettarlık";
+"category.sleep" = "Uyku";
+"category.energy" = "Enerji";
+
+/* Mood Sessions */
+"mood_sessions.title" = "Ruh Hali Seansları";
+"mood_sessions.loading" = "Ruh hali seansları yükleniyor...";
+"mood_sessions.premium_required" = "Premium Özellik";
+"mood_sessions.premium_description" = "Ruh Hali Seansları sadece premium aboneler için mevcuttur.";
+"mood_sessions.start_session" = "Ruh Hali Seansınızı Başlatın";
+"mood_sessions.select_category" = "Ruh Hali Kategorisi Seçin";
+"mood_sessions.notification_frequency" = "Bildirim Sıklığı";
+"mood_sessions.start_button" = "Seans Başlat";
+"mood_sessions.active_session" = "Aktif Ruh Hali Seansı";
+"mood_sessions.days_remaining" = "Kalan gün";
+"mood_sessions.frequency" = "Sıklık";
+"mood_sessions.started" = "Başladı";
+"mood_sessions.ends" = "Bitiş";
+"mood_sessions.end_early" = "Seansı Erken Bitir";
+"mood_sessions.per_day" = "günde";
+
+/* Features */
+"feature.weekly_sessions" = "Haftalık kişiselleştirilmiş ruh hali seansları";
+"feature.daily_notifications" = "Günde 1-4 zamanlanmış bildirim";
+"feature.category_affirmations" = "Kategoriye dayalı onaylamalar";
+"feature.timezone_scheduling" = "Saat dilimine duyarlı zamanlama";
+
+/* Profile */
+"profile.title" = "Profil";
+"profile.loading" = "Profil yükleniyor...";
+"profile.edit" = "Profili Düzenle";
+"profile.save" = "Kaydet";
+"profile.cancel" = "İptal";
+"profile.personal_info" = "Kişisel Bilgiler";
+"profile.birth_info" = "Doğum Bilgileri";
+"profile.full_name" = "Ad Soyad";
+"profile.nickname" = "Takma Ad";
+"profile.date_of_birth" = "Doğum Tarihi";
+"profile.birth_hour" = "Doğum Saati (İsteğe Bağlı)";
+"profile.not_set" = "Ayarlanmamış";
+"profile.privacy_note" = "Bu bilgiler daha kişiselleştirilmiş içerik sağlamamıza yardımcı olur ve tamamen gizli tutulur.";
+
+/* Profile Sections */
+"profile.account" = "Hesap";
+"profile.notification_settings" = "Bildirim Ayarları";
+"profile.subscription_management" = "Abonelik Yönetimi";
+"profile.upgrade_premium" = "Premium'a Yükselt";
+"profile.privacy_data" = "Gizlilik ve Veri";
+"profile.export_data" = "Verilerimi Dışa Aktar";
+"profile.delete_account" = "Hesabı Sil";
+"profile.support" = "Destek";
+"profile.help_center" = "Yardım Merkezi";
+"profile.privacy_policy" = "Gizlilik Politikası";
+"profile.terms_service" = "Kullanım Şartları";
+"profile.sign_out" = "Çıkış Yap";
+
+/* Subscription */
+"subscription.premium_features" = "Premium Özelliklerin Kilidini Aç";
+"subscription.personalized_content" = "Kişiselleştirilmiş ruh hali seansları ve zamanlanmış bildirimler alın";
+"subscription.weekly_sessions" = "Haftalık Ruh Hali Seansları";
+"subscription.weekly_sessions_desc" = "Seçtiğiniz kategoriye dayalı kişiselleştirilmiş onaylamalar";
+"subscription.smart_notifications" = "Akıllı Bildirimler";
+"subscription.smart_notifications_desc" = "Saat diliminizi ve sessiz saatlerinizi dikkate alan günde 1-4 hatırlatıcı";
+"subscription.category_selection" = "Kategori Seçimi";
+"subscription.category_selection_desc" = "Özgüven, motivasyon, özsevgi ve daha fazlası arasından seçim yapın";
+"subscription.intelligent_scheduling" = "Akıllı Zamanlama";
+"subscription.intelligent_scheduling_desc" = "30 gün içinde aynı onaylama tekrarlanmaz";
+"subscription.loading_options" = "Abonelik seçenekleri yükleniyor...";
+"subscription.unable_to_load" = "Abonelik seçenekleri yüklenemiyor";
+"subscription.restore_purchases" = "Satın Alımları Geri Yükle";
+"subscription.terms" = "Şartlar";
+"subscription.privacy" = "Gizlilik";
+"subscription.purchase_error" = "Satın Alma Hatası";
+"subscription.purchase_error_desc" = "Satın alma sırasında bir hata oluştu";
+
+/* General */
+"general.ok" = "Tamam";
+"general.error" = "Hata";
+"general.loading" = "Yükleniyor...";
+"general.premium" = "Premium";
+"general.free" = "Ücretsiz";
+
+/* Accessibility */
+"accessibility.logo" = "Soul-Pal Logosu";
+"accessibility.premium_feature" = "Premium özellik";
+"accessibility.loading" = "Yükleniyor";
+"accessibility.error_occurred" = "Hata oluştu";
+"accessibility.premium_subscriber" = "Premium abone";
+"accessibility.profile_avatar" = "Profil avatarı";
+"accessibility.sign_in_apple" = "Apple ile giriş yap";
+"accessibility.sign_in_google" = "Google ile giriş yap";
+"accessibility.upgrade_premium" = "Premium aboneliğe yükselt";
+"accessibility.destructive_action" = "Yıkıcı eylem"; 

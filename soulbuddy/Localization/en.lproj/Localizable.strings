@@ -1,0 +1,132 @@
+/* Authentication */
+"auth.welcome_back" = "Welcome back";
+"auth.create_account" = "Create your account";
+"auth.email_placeholder" = "Email";
+"auth.password_placeholder" = "Password";
+"auth.sign_in" = "Sign In";
+"auth.create_account_button" = "Create Account";
+"auth.already_have_account" = "Already have an account? Sign In";
+"auth.no_account" = "Don't have an account? Sign Up";
+"auth.continue_with_apple" = "Continue with Apple";
+"auth.continue_with_google" = "Continue with Google";
+
+/* Navigation */
+"nav.home" = "Home";
+"nav.mood_sessions" = "Mood Sessions";
+"nav.profile" = "Profile";
+
+/* Affirmations */
+"affirmations.title" = "Daily Affirmations";
+"affirmations.loading" = "Loading affirmations...";
+"affirmations.error" = "Something went wrong";
+"affirmations.try_again" = "Try Again";
+"affirmations.no_content" = "No affirmations available";
+"affirmations.no_content_description" = "Check back later for more positive content!";
+"affirmations.next" = "Next Affirmation";
+"affirmations.previous" = "Previous";
+"affirmations.current_position" = "%d of %d";
+
+/* Intensities */
+"intensity.gentle" = "Gentle";
+"intensity.moderate" = "Moderate";
+"intensity.strong" = "Strong";
+
+/* Categories */
+"category.confidence" = "Confidence";
+"category.motivation" = "Motivation";
+"category.self_love" = "Self Love";
+"category.stress_relief" = "Stress Relief";
+"category.focus" = "Focus";
+"category.gratitude" = "Gratitude";
+"category.sleep" = "Sleep";
+"category.energy" = "Energy";
+
+/* Mood Sessions */
+"mood_sessions.title" = "Mood Sessions";
+"mood_sessions.loading" = "Loading mood sessions...";
+"mood_sessions.premium_required" = "Premium Feature";
+"mood_sessions.premium_description" = "Mood Sessions are available for premium subscribers only.";
+"mood_sessions.start_session" = "Start Your Mood Session";
+"mood_sessions.select_category" = "Select Mood Category";
+"mood_sessions.notification_frequency" = "Notification Frequency";
+"mood_sessions.start_button" = "Start Session";
+"mood_sessions.active_session" = "Active Mood Session";
+"mood_sessions.days_remaining" = "Days remaining";
+"mood_sessions.frequency" = "Frequency";
+"mood_sessions.started" = "Started";
+"mood_sessions.ends" = "Ends";
+"mood_sessions.end_early" = "End Session Early";
+"mood_sessions.per_day" = "per day";
+
+/* Features */
+"feature.weekly_sessions" = "Weekly personalized mood sessions";
+"feature.daily_notifications" = "1-4 daily scheduled notifications";
+"feature.category_affirmations" = "Category-based affirmations";
+"feature.timezone_scheduling" = "Timezone-aware scheduling";
+
+/* Profile */
+"profile.title" = "Profile";
+"profile.loading" = "Loading profile...";
+"profile.edit" = "Edit Profile";
+"profile.save" = "Save";
+"profile.cancel" = "Cancel";
+"profile.personal_info" = "Personal Information";
+"profile.birth_info" = "Birth Information";
+"profile.full_name" = "Full Name";
+"profile.nickname" = "Nickname";
+"profile.date_of_birth" = "Date of Birth";
+"profile.birth_hour" = "Birth Hour (Optional)";
+"profile.not_set" = "Not set";
+"profile.privacy_note" = "This information helps us provide more personalized content and is kept completely private.";
+
+/* Profile Sections */
+"profile.account" = "Account";
+"profile.notification_settings" = "Notification Settings";
+"profile.subscription_management" = "Subscription Management";
+"profile.upgrade_premium" = "Upgrade to Premium";
+"profile.privacy_data" = "Privacy & Data";
+"profile.export_data" = "Export My Data";
+"profile.delete_account" = "Delete Account";
+"profile.support" = "Support";
+"profile.help_center" = "Help Center";
+"profile.privacy_policy" = "Privacy Policy";
+"profile.terms_service" = "Terms of Service";
+"profile.sign_out" = "Sign Out";
+
+/* Subscription */
+"subscription.premium_features" = "Unlock Premium Features";
+"subscription.personalized_content" = "Get personalized mood sessions and scheduled notifications";
+"subscription.weekly_sessions" = "Weekly Mood Sessions";
+"subscription.weekly_sessions_desc" = "Personalized affirmations based on your selected category";
+"subscription.smart_notifications" = "Smart Notifications";
+"subscription.smart_notifications_desc" = "1-4 daily reminders respecting your timezone and quiet hours";
+"subscription.category_selection" = "Category Selection";
+"subscription.category_selection_desc" = "Choose from confidence, motivation, self-love, and more";
+"subscription.intelligent_scheduling" = "Intelligent Scheduling";
+"subscription.intelligent_scheduling_desc" = "No repeated affirmations within 30 days";
+"subscription.loading_options" = "Loading subscription options...";
+"subscription.unable_to_load" = "Unable to load subscription options";
+"subscription.restore_purchases" = "Restore Purchases";
+"subscription.terms" = "Terms";
+"subscription.privacy" = "Privacy";
+"subscription.purchase_error" = "Purchase Error";
+"subscription.purchase_error_desc" = "An error occurred during purchase";
+
+/* General */
+"general.ok" = "OK";
+"general.error" = "Error";
+"general.loading" = "Loading...";
+"general.premium" = "Premium";
+"general.free" = "Free";
+
+/* Accessibility */
+"accessibility.logo" = "Soul-Pal Logo";
+"accessibility.premium_feature" = "Premium feature";
+"accessibility.loading" = "Loading";
+"accessibility.error_occurred" = "Error occurred";
+"accessibility.premium_subscriber" = "Premium subscriber";
+"accessibility.profile_avatar" = "Profile avatar";
+"accessibility.sign_in_apple" = "Sign in with Apple";
+"accessibility.sign_in_google" = "Sign in with Google";
+"accessibility.upgrade_premium" = "Upgrade to premium subscription";
+"accessibility.destructive_action" = "Destructive action"; 
