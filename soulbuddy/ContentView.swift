@@ -11,21 +11,39 @@ struct ContentView: View {
     @EnvironmentObject private var supabaseService: SupabaseService
     @EnvironmentObject private var supabaseClientManager: SupabaseClientManager
     @EnvironmentObject private var profileStore: ProfileStore
+    @EnvironmentObject private var pushRegistrationService: PushRegistrationService
     @StateObject private var authService = AuthService.shared
+    @StateObject private var permissionManager = PermissionManager.shared
     @Environment(\.colorScheme) var colorScheme
     @State private var showDebugMenu = false
     @State private var showProfileSetup = false
+    @State private var showPermissionFlow = false
     
     var body: some View {
         NavigationStack {
             Group {
                 if authService.isAuthenticated {
                     if profileStore.isProfileComplete {
-                        MainTabView()
+                        if showPermissionFlow {
+                            PermissionFlow { granted in
+                                showPermissionFlow = false
+                                if granted {
+                                    print("✅ Push notifications enabled")
+                                } else {
+                                    print("⚠️ Push notifications declined")
+                                }
+                            }
                             .transition(.asymmetric(
-                                insertion: .move(edge: .trailing),
-                                removal: .move(edge: .leading)
+                                insertion: .move(edge: .bottom),
+                                removal: .move(edge: .bottom)
                             ))
+                        } else {
+                            MainTabView()
+                                .transition(.asymmetric(
+                                    insertion: .move(edge: .trailing),
+                                    removal: .move(edge: .leading)
+                                ))
+                        }
                     } else {
                         ProfileSetupView(isOnboarding: true) { _ in
                             showProfileSetup = false
@@ -72,6 +90,47 @@ struct ContentView: View {
             // Load profile when authenticated
             if authService.isAuthenticated {
                 await profileStore.loadProfile()
+                
+                // Check if we should show permission flow
+                await checkPermissionFlowNeeded()
+            }
+        }
+        .onChange(of: authService.isAuthenticated) { isAuthenticated in
+            if isAuthenticated {
+                Task {
+                    await checkPermissionFlowNeeded()
+                }
+            }
+        }
+        .onChange(of: profileStore.isProfileComplete) { isComplete in
+            if isComplete && authService.isAuthenticated {
+                Task {
+                    await checkPermissionFlowNeeded()
+                }
+            }
+        }
+    }
+    
+    // MARK: - Permission Flow Logic
+    
+    private func checkPermissionFlowNeeded() async {
+        // Only show permission flow if:
+        // 1. User is authenticated
+        // 2. Profile is complete 
+        // 3. Permission is not determined yet
+        // 4. We haven't already shown the flow
+        
+        guard authService.isAuthenticated,
+              profileStore.isProfileComplete else {
+            return
+        }
+        
+        await permissionManager.checkInitialPermissionStatus()
+        
+        // Show permission flow if permission not determined
+        if pushRegistrationService.shouldShowPermissionFlow {
+            DispatchQueue.main.async {
+                self.showPermissionFlow = true
             }
         }
     }

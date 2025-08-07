@@ -1,11 +1,16 @@
 import SwiftUI
 import Supabase
+import UserNotifications
 
 @main
 struct SoulBuddyApp: App {
     @StateObject private var supabaseService = SupabaseService.shared
     @StateObject private var supabaseClientManager = SupabaseClientManager.shared
     @StateObject private var profileStore = ProfileStore.shared
+    @StateObject private var pushRegistrationService = PushRegistrationService.shared
+    
+    // App Delegate for push notifications
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
         WindowGroup {
@@ -13,6 +18,7 @@ struct SoulBuddyApp: App {
                 .environmentObject(supabaseService)
                 .environmentObject(supabaseClientManager)
                 .environmentObject(profileStore)
+                .environmentObject(pushRegistrationService)
                 .preferredColorScheme(nil) // Allow system to control light/dark mode
                 .onAppear {
                     setupApp()
