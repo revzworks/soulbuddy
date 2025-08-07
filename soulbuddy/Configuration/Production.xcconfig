@@ -1,0 +1,38 @@
+//
+//  Production.xcconfig
+//  SoulBuddy
+//
+//  Production environment configuration
+//
+
+// Environment
+ENVIRONMENT = Production
+DEBUG = NO
+
+// App Configuration
+PRODUCT_NAME = SoulBuddy
+PRODUCT_BUNDLE_IDENTIFIER = deneme.soulbuddy
+
+// Supabase Configuration
+SUPABASE_URL = https://qvgitnefikrhavhlaadl.supabase.co
+SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF2Z2l0bmVmaWtyaGF2aGxhYWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1MzMxMDQsImV4cCI6MjA2OTEwOTEwNH0.3xIjYsAwMADWMun0zeJz2bc3XLsOVcPh67EJlZx6tnk
+
+// Production Features
+ENABLE_LOGGING = NO
+ENABLE_DEBUG_MENU = NO
+SKIP_ONBOARDING = NO
+
+// Performance - Maximum optimization for production
+GCC_OPTIMIZATION_LEVEL = s
+SWIFT_OPTIMIZATION_LEVEL = -O
+ENABLE_BITCODE = YES
+
+// Code Signing
+CODE_SIGN_STYLE = Manual
+DEVELOPMENT_TEAM = YOUR_TEAM_ID
+PROVISIONING_PROFILE_SPECIFIER = SoulBuddy Distribution
+
+// App Store
+SKIP_INSTALL = NO
+COPY_PHASE_STRIP = YES
+VALIDATE_PRODUCT = YES 

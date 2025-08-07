@@ -15,14 +15,20 @@ class SupabaseService: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     private init() {
-        // TODO: Replace with your actual Supabase URL and API key
-        let url = ProcessInfo.processInfo.environment["SUPABASE_URL"] ?? "https://your-project.supabase.co"
-        let key = ProcessInfo.processInfo.environment["SUPABASE_ANON_KEY"] ?? "your-anon-key"
+        // Get configuration from Info.plist (populated by .xcconfig files)
+        guard let urlString = Bundle.main.infoDictionary?["SUPABASE_URL"] as? String,
+              let url = URL(string: urlString),
+              let key = Bundle.main.infoDictionary?["SUPABASE_ANON_KEY"] as? String else {
+            fatalError("❌ Supabase configuration missing. Please check your .xcconfig files and ensure SUPABASE_URL and SUPABASE_ANON_KEY are set.")
+        }
         
         self.supabase = SupabaseClient(
-            supabaseURL: URL(string: url)!,
+            supabaseURL: url,
             supabaseKey: key
         )
+        
+        print("✅ Supabase initialized for environment: \(AppConfig.environment)")
+        print("🔗 Connected to: \(urlString)")
         
         setupAuthStateListener()
     }

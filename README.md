@@ -191,4 +191,250 @@ Secrets: `APPSTORE_ISSUER_ID`, `APPSTORE_KEY_ID`, `APPSTORE_PRIVATE_KEY`, `APP_B
 
 ---
 
-## 8) iOS App — Folder Layout 
+## 8) Fastlane Usage
+
+### Prerequisites
+
+1. **Install dependencies:**
+   ```bash
+   bundle install
+   ```
+
+2. **Set up environment variables:**
+   Create a `.env` file in your project root:
+   ```bash
+   # Apple Developer
+   APPLE_ID=your-apple-id@example.com
+   APPLE_TEAM_ID=YOUR_TEAM_ID
+   APP_STORE_CONNECT_TEAM_ID=YOUR_TEAM_ID
+   APP_BUNDLE_ID=com.revzworks.soulbuddy
+   
+   # App Store Connect API (for CI/CD)
+   APP_STORE_CONNECT_API_KEY_KEY_ID=YOUR_KEY_ID
+   APP_STORE_CONNECT_API_KEY_ISSUER_ID=YOUR_ISSUER_ID
+   APP_STORE_CONNECT_API_KEY_KEY=YOUR_PRIVATE_KEY_BASE64
+   
+   # Code Signing (fastlane match)
+   MATCH_GIT_URL=git@github.com:your-org/certificates.git
+   MATCH_PASSWORD=your_match_password
+   
+   # Optional: Notifications
+   SLACK_URL=https://hooks.slack.com/services/...
+   ```
+
+### Available Lanes
+
+#### Development & Testing
+```bash
+# Run unit tests
+bundle exec fastlane test
+
+# Build for testing (no codesigning)
+bundle exec fastlane build_for_testing
+
+# Setup certificates and provisioning profiles
+bundle exec fastlane setup_certificates
+```
+
+#### Beta Deployment
+```bash
+# Deploy to TestFlight
+bundle exec fastlane beta
+
+# Skip TestFlight upload (useful for testing)
+SKIP_TESTFLIGHT=true bundle exec fastlane beta
+```
+
+#### Release Deployment
+```bash
+# Deploy to App Store (production)
+bundle exec fastlane release
+
+# Skip App Store upload (useful for testing)
+SKIP_APP_STORE=true bundle exec fastlane release
+```
+
+#### CI/CD Setup
+```bash
+# Setup CI environment (run in GitHub Actions)
+bundle exec fastlane setup_ci
+```
+
+### GitHub Actions Integration
+
+The project includes automated CI/CD workflows:
+
+- **Pull Requests:** Runs tests and builds for testing
+- **Main Branch:** Runs tests and deploys to TestFlight
+- **Manual Trigger:** Can run any lane (test/beta/release)
+
+**Required GitHub Secrets:**
+```
+APPLE_ID
+APPLE_TEAM_ID
+APP_STORE_CONNECT_TEAM_ID
+APP_STORE_CONNECT_API_KEY_KEY_ID
+APP_STORE_CONNECT_API_KEY_ISSUER_ID
+APP_STORE_CONNECT_API_KEY_KEY
+MATCH_GIT_URL
+MATCH_PASSWORD
+SLACK_URL (optional)
+```
+
+### Code Signing with Match
+
+1. **Initialize match repository:**
+   ```bash
+   bundle exec fastlane match init
+   ```
+
+2. **Generate certificates:**
+   ```bash
+   bundle exec fastlane match development
+   bundle exec fastlane match appstore
+   ```
+
+3. **In CI/CD, certificates are automatically downloaded**
+
+### Troubleshooting
+
+- **Build fails with signing errors:** Run `bundle exec fastlane setup_certificates`
+- **Tests fail:** Ensure your scheme has tests enabled and targets iOS 17+
+- **TestFlight upload fails:** Verify App Store Connect API key permissions
+- **Version conflicts:** Use `SKIP_GIT_CHECK=true` environment variable
+
+---
+
+## 9) Build Instructions
+
+### Prerequisites
+
+1. **Xcode 15.2+** with iOS 17+ SDK
+2. **Apple Developer Account** (for device testing and deployment)
+3. **Supabase Project** with configured database
+
+### Initial Setup
+
+1. **Clone and Open Project:**
+   ```bash
+   git clone https://github.com/revzworks/soulbuddy.git
+   cd soulbuddy
+   open soulbuddy.xcodeproj
+   ```
+
+2. **Add Swift Package Dependencies:**
+   
+   In Xcode, go to `File > Add Package Dependencies` and add:
+   
+   - **Supabase Swift SDK**
+     ```
+     https://github.com/supabase-community/supabase-swift.git
+     ```
+     Version: `2.5.1` or later
+     Products: `Supabase`, `PostgREST`, `GoTrue`, `Realtime`, `Storage`
+   
+   - **Google Sign In**
+     ```
+     https://github.com/google/GoogleSignIn-iOS.git
+     ```
+     Version: `7.0.0` or later
+     Product: `GoogleSignIn`
+   
+   - **CombineExt** (Optional)
+     ```
+     https://github.com/CombineCommunity/CombineExt.git
+     ```
+     Version: `1.8.1` or later
+     Product: `CombineExt`
+
+3. **Configure Build Schemes:**
+   
+   The project includes three .xcconfig files for different environments:
+   - `Development.xcconfig` - For local development
+   - `Staging.xcconfig` - For internal testing
+   - `Production.xcconfig` - For App Store release
+   
+   **To set up schemes in Xcode:**
+   
+   a. Go to `Product > Scheme > Edit Scheme`
+   b. Create/edit schemes for each environment:
+      - **SoulBuddy Dev** → Use `Development.xcconfig`
+      - **SoulBuddy Staging** → Use `Staging.xcconfig`  
+      - **SoulBuddy Production** → Use `Production.xcconfig`
+
+4. **Update Configuration:**
+   
+   Edit the `.xcconfig` files to match your setup:
+   ```bash
+   # Update YOUR_TEAM_ID in all .xcconfig files
+   DEVELOPMENT_TEAM = YOUR_ACTUAL_TEAM_ID
+   
+   # Supabase URLs are already configured for the current instance
+   ```
+
+### Building and Running
+
+1. **Development Build:**
+   ```bash
+   # Select "SoulBuddy Dev" scheme in Xcode
+   # Press Cmd+R to build and run
+   ```
+
+2. **Using Fastlane:**
+   ```bash
+   bundle install
+   bundle exec fastlane test        # Run tests
+   bundle exec fastlane beta        # Deploy to TestFlight
+   bundle exec fastlane release     # Deploy to App Store
+   ```
+
+3. **Simulator Testing:**
+   - Select any iOS 17+ simulator
+   - Build and run (`Cmd+R`)
+   - App will use Development configuration automatically
+
+### Key Features to Test
+
+1. **Theme System:**
+   - Light/Dark mode switching
+   - Accessible via `Theme.*` tokens
+   - Preview available in Xcode canvas
+
+2. **Supabase Integration:**
+   - Environment-based configuration
+   - Authentication flows
+   - Database connectivity
+
+3. **Environment Switching:**
+   - Different bundle IDs per environment
+   - Separate Supabase configurations
+   - Debug features in Development only
+
+### Troubleshooting
+
+- **Build Errors:** Ensure all Swift packages are resolved (`File > Packages > Resolve Package Versions`)
+- **Supabase Connection:** Check `.xcconfig` files have correct URLs and keys
+- **Signing Issues:** Update `DEVELOPMENT_TEAM` in `.xcconfig` files
+- **Theme Issues:** Verify `Theme.swift` is included in target
+
+### Project Structure
+
+```
+soulbuddy/
+├── App/
+│   └── SoulBuddyApp.swift          # Main app entry point
+├── Theme/
+│   └── Theme.swift                 # Design system (colors, fonts, spacing)
+├── Configuration/
+│   ├── Development.xcconfig        # Dev environment config
+│   ├── Staging.xcconfig           # Staging environment config
+│   └── Production.xcconfig        # Production environment config
+├── Views/                         # SwiftUI views organized by feature
+├── Models/                        # Data models
+├── Services/                      # Business logic and API clients
+└── Localization/                  # Multi-language support
+```
+
+---
+
+## 10) iOS App — Folder Layout 

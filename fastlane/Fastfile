@@ -1,0 +1,195 @@
+# This file contains the fastlane configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+
+default_platform(:ios)
+
+platform :ios do
+  # Variables
+  scheme = "soulbuddy"
+  workspace = "soulbuddy.xcodeproj"
+  
+  before_all do
+    # Ensure we're in the correct directory
+    ensure_git_status_clean unless ENV["SKIP_GIT_CHECK"]
+  end
+
+  desc "Run all tests"
+  lane :test do
+    run_tests(
+      workspace: workspace,
+      scheme: scheme,
+      device: "iPhone 15",
+      clean: true,
+      code_coverage: true,
+      output_directory: "./test_output",
+      output_style: "rspec"
+    )
+  end
+
+  desc "Build for testing (used in CI)"
+  lane :build_for_testing do
+    build_app(
+      workspace: workspace,
+      scheme: scheme,
+      configuration: "Debug",
+      skip_archive: true,
+      skip_codesigning: true,
+      build_path: "./build"
+    )
+  end
+
+  desc "Archive and upload to TestFlight"
+  lane :beta do
+    # Increment build number
+    increment_build_number(
+      xcodeproj: "soulbuddy.xcodeproj"
+    )
+    
+    # Build the app
+    build_app(
+      workspace: workspace,
+      scheme: scheme,
+      configuration: "Release",
+      output_directory: "./build",
+      output_name: "soulbuddy.ipa",
+      clean: true,
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          ENV["APP_BUNDLE_ID"] || "com.revzworks.soulbuddy" => ENV["PROVISIONING_PROFILE_NAME"] || "SoulBuddy Distribution"
+        }
+      }
+    )
+    
+    # Upload to TestFlight
+    unless ENV["SKIP_TESTFLIGHT"]
+      upload_to_testflight(
+        api_key_path: ENV["APP_STORE_CONNECT_API_KEY_PATH"],
+        skip_waiting_for_build_processing: true,
+        skip_submission: true,
+        notify_external_testers: false
+      )
+    end
+    
+    # Clean up
+    clean_build_artifacts
+  end
+
+  desc "Deploy to App Store"
+  lane :release do
+    # Ensure we're on main branch
+    ensure_git_branch(branch: "main")
+    
+    # Run tests first
+    test
+    
+    # Increment version number
+    increment_version_number(
+      xcodeproj: "soulbuddy.xcodeproj",
+      bump_type: "patch"
+    )
+    
+    # Increment build number
+    increment_build_number(
+      xcodeproj: "soulbuddy.xcodeproj"
+    )
+    
+    # Build the app
+    build_app(
+      workspace: workspace,
+      scheme: scheme,
+      configuration: "Release",
+      output_directory: "./build",
+      output_name: "soulbuddy.ipa",
+      clean: true,
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          ENV["APP_BUNDLE_ID"] || "com.revzworks.soulbuddy" => ENV["PROVISIONING_PROFILE_NAME"] || "SoulBuddy Distribution"
+        }
+      }
+    )
+    
+    # Upload to App Store
+    unless ENV["SKIP_APP_STORE"]
+      upload_to_app_store(
+        api_key_path: ENV["APP_STORE_CONNECT_API_KEY_PATH"],
+        force: true,
+        reject_if_possible: true,
+        skip_metadata: false,
+        skip_screenshots: true,
+        submit_for_review: false
+      )
+    end
+    
+    # Tag release
+    add_git_tag(
+      tag: "v#{get_version_number(xcodeproj: 'soulbuddy.xcodeproj')}-#{get_build_number(xcodeproj: 'soulbuddy.xcodeproj')}"
+    )
+    
+    # Push changes
+    push_to_git_remote
+    
+    # Clean up
+    clean_build_artifacts
+  end
+
+  desc "Setup certificates and provisioning profiles"
+  lane :setup_certificates do
+    match(
+      type: "development",
+      app_identifier: ENV["APP_BUNDLE_ID"] || "com.revzworks.soulbuddy",
+      readonly: true
+    )
+    
+    match(
+      type: "appstore",
+      app_identifier: ENV["APP_BUNDLE_ID"] || "com.revzworks.soulbuddy",
+      readonly: true
+    )
+  end
+
+  desc "Setup for CI environment"
+  lane :setup_ci do
+    setup_ci if ENV["CI"]
+    
+    # Import certificates for CI
+    if ENV["MATCH_PASSWORD"] && ENV["MATCH_GIT_URL"]
+      setup_certificates
+    end
+  end
+
+  # Error handling
+  error do |lane, exception|
+    UI.error("Lane #{lane} failed with exception: #{exception}")
+    
+    # Clean up on error
+    clean_build_artifacts if File.exist?("./build")
+    
+    # Send notification (if configured)
+    if ENV["SLACK_URL"]
+      slack(
+        message: "iOS build failed in lane: #{lane}",
+        success: false
+      )
+    end
+  end
+
+  after_all do |lane|
+    # Success notification
+    if ENV["SLACK_URL"]
+      slack(
+        message: "iOS lane #{lane} completed successfully! 🎉",
+        success: true
+      )
+    end
+  end
+end 

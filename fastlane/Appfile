@@ -1,0 +1,14 @@
+# The bundle identifier of your app
+app_identifier(ENV["APP_BUNDLE_ID"] || "com.revzworks.soulbuddy")
+
+# Your Apple Developer Portal username
+apple_id(ENV["APPLE_ID"] || "your-apple-id@example.com")
+
+# Developer Team ID
+team_id(ENV["APPLE_TEAM_ID"])
+
+# App Store Connect Team ID (if different from Developer Team ID)
+itc_team_id(ENV["APP_STORE_CONNECT_TEAM_ID"])
+
+# For more information about the Appfile, see:
+# https://docs.fastlane.tools/advanced/#appfile 
