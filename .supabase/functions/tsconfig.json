@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "lib": ["deno.window"],
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "checkJs": false,
+    "types": ["https://deno.land/x/xhr@0.3.0/mod.ts"]
+  },
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts",
+    "**/test_*.ts"
+  ],
+  "include": [
+    "**/*.ts",
+    "**/*.js"
+  ]
+} 
